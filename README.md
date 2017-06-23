@@ -36,13 +36,12 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [MDTraj](http://mdtraj.org/1.8.0/index.html) - Generate and read trajectories
+* [MSIBI](https://github.com/mosdef-hub/msibi/) - Run pair potential optimizations using multistate-iterative Boltzmann inversion.
 
 ## Authors
 
-* **Davy Yue** - *Programmer* - [MuMS](https://github.com/ddyy345)
+* **Davy Yue** - *Vanderbilt MuMS Institute Assistant Researcher* - [Github Account](https://github.com/ddyy345)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
