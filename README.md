@@ -2,6 +2,8 @@
 
 Automate the process for converting a given trajectory for a bead into the desired rdf. Establish a mapping for the coarse-grain bead and construct the corresponding coarse-grain trajectory.
 
+... Incoming updates arriving this July 2017 to a Github repository near you ...
+
 
 ## Getting Started
 
@@ -34,7 +36,7 @@ Download and install the following packages:
 ## Notable Contributors
 
 * **Timothy C. Moore** - *Vanderbilt MuMS Institute Graduate Researcher* - [Github Account](https://github.com/tcmoore3)
-* Provided phenomenal coaching throughout API creation process
+    Provided phenomenal coaching throughout API creation process
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
@@ -45,6 +47,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 * [Stack Overflow](https://stackoverflow.com/questions/tagged/python) for stackin' tips n' flowin' sips
-* [Google](https://www.google.com) for keepin' it real since 1998
+* [Google](https://www.google.com) for bein' real legit since 1998
 * [Sidewalks](https://dncache-mauganscorp.netdna-ssl.com/thumbseg/637/637742-bigthumbnail.jpg) for keeping me off the streets
 * etc
