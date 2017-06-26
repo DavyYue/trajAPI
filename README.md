@@ -31,12 +31,14 @@ Download and install the following packages:
 
 ## Authors
 
-* **Davy Yue** - *Vanderbilt MuMS Institute Assistant Researcher* - [Github Account](https://github.com/ddyy345)
+* **Davy Yue** - *Vanderbilt MuMS Institute Assistant Researcher* - [Profile](https://github.com/ddyy345)
 
 ## Notable Contributors
 
-* **Timothy C. Moore** - *Vanderbilt MuMS Institute Graduate Researcher* - [Github Account](https://github.com/tcmoore3)
-    Provided phenomenal coaching throughout API creation process
+* **Timothy C. Moore** - *Vanderbilt MuMS Institute Graduate Researcher* - [Profile](https://github.com/tcmoore3)
+
+    * Provided phenomenal coaching throughout API creation process
+    * Supplied creative ideas in every stage of the SDLC
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
