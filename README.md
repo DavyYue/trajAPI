@@ -43,7 +43,7 @@ Download and install the following packages:
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 #### Citation [![Citing MSIBI](https://img.shields.io/badge/DOI-10.1063%2F1.4880555-blue.svg)](http://dx.doi.org/10.1063/1.4880555)
-Details of the underlying method and its validation can be found [here](http://dx.doi.org/10.1063/1.4880555).
+Details of the underlying method and its validation can be found in a published paper [here](http://dx.doi.org/10.1063/1.4880555).
 
 If you use this package or MSIBI, please cite the above paper. The BibTeX reference is
 ```
