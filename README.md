@@ -42,6 +42,22 @@ Download and install the following packages:
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
+#### Citation [![Citing MSIBI](https://img.shields.io/badge/DOI-10.1063%2F1.4880555-blue.svg)](http://dx.doi.org/10.1063/1.4880555)
+Details of the underlying method and its validation can be found [here](http://dx.doi.org/10.1063/1.4880555).
+
+If you use this package or MSIBI, please cite the above paper. The BibTeX reference is
+```
+@article{Moore2014,
+      author = "Moore, Timothy C. and Iacovella, Christopher R. and McCabe, Clare",
+      title = "Derivation of coarse-grained potentials via multistate iterative Boltzmann inversion",
+      journal = "The Journal of Chemical Physics",
+      year = "2014",
+      volume = "140",
+      number = "22",
+      doi = "http://dx.doi.org/10.1063/1.4880555"
+}
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
