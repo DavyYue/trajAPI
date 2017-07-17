@@ -1,8 +1,6 @@
 <?xml version="1.3" encoding="UTF-8"?>
 <system>
   <bead molecule_name="Propane">
-    <section type="C3E" elements="C C C" map="{0: [0, 1, 2]}"/>
-    <section type="C3M" elements="C C C" map="{1: [3, 4, 5]}"/>
-    <section type="C3E" elements="C C C" map="{2: [6, 7, 8]}"/>
+    <section type="C3A" elements="[CH3][CH2][CH3]"/>
   </bead>
 </system>
