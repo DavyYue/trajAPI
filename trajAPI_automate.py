@@ -1,23 +1,6 @@
-
-# coding: utf-8
-
 # # testAPI_automate
 #
 # Created by Davy Yue 2017-06-26
-
-## 2017_06_27 1:00 PM CST
-## **** DEBUGGING/TESTING NOTES ****
-## - think about inputs and outputs
-## - think about where variables can be passed as parameters
-## - need test cases - maybe with n-dodecane
-## - need more filetypes to read instead of just hoomdxml
-## - check with generated rdfs from testAPI_propane to compare results
-## - maybe use more functions to call
-## - consider adaptation for other elements (any periodic ones)
-##       use element dictionary in msibi repo
-
-
-# ### Imports
 import itertools
 import string
 import os
@@ -32,21 +15,17 @@ import matplotlib.pyplot as plt
 from msibi import MSIBI, State, Pair, mie
 import mdtraj as md
 
-## check possible other packages to ease process
 
-
-# ### Functions
 def read_search_mapping(search_mapping_filename, user_mapping_filename):
     # parser = ET.XMLParser(encoding="utf-8")
     # root = ET.fromstring(search_mapping_filename, parser=parser)
     root = ET.fromstring(open(search_mapping_filename).read())
     # root = ET.parse(search_mapping_filename).getroot()
+
     searchstr = [] # list containing all search values ordered by priority
     for value in root.findall('value'):
         searchstr.append(value.attrib['searchstr'])
         print(searchstr)
-
-# read_search_mapping('propane_search_mapping.xml', 'propane_user_mapping.xml')
 
 # SMARTS string
 # Current supported SMARTS string: https://github.com/mosdef-hub/foyer/issues/63
@@ -173,9 +152,6 @@ def compute_files(cg_xyz, cg_top, t, molecule_name, element_names):
 
     plot_output(r, g_r, molecule_name)
 
-
-# In[8]:
-
 def plot_output(x, y, molecule_name):
     ## modify figsize according to drop-off point
     plt.figure(num=None, figsize=(16, 12), dpi=80, facecolor='w', edgecolor='k')
@@ -210,9 +186,10 @@ def convert_Traj_RDF():
     cg_xyz, cg_top = create_system_mapping(element_names, n_sections_TOTAL, t)
     compute_files(cg_xyz, cg_top, t, molecule_name, element_names)
 
+
+
+
 # Execute functions
-## maybe use dictionary for element_names?
-## incorporate the arguments in initialization for map_beads()
 ## maybe initialize element_names array from read-in file with bonds
 ## bonds recorded in structure indicate elements involved in rdf
 convert_Traj_RDF()
