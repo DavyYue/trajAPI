@@ -11,6 +11,7 @@ from periodic import element
 import numpy as np
 import matplotlib.pyplot as plt
 # get_ipython().magic('matplotlib inline')
+import time
 
 from msibi import MSIBI, State, Pair, mie
 import mdtraj as md
@@ -131,7 +132,8 @@ def compute_files(cg_xyz, cg_top, t, molecule_name, element_names):
                             unitcell_lengths=t.unitcell_lengths,
                             unitcell_angles=t.unitcell_angles)
     ## need better file naming convention and rule guideline
-    cg_traj.save_dcd('cg_traj_{0:s}.dcd'.format(molecule_name)) ## need check statements to prevent file overwrite
+    filepath = os.path.join(os.getcwd(), 'data/cg_traj_{0:s}.dcd'.format(molecule_name))
+    cg_traj.save_dcd(filepath) ## need check statements to prevent file overwrite
                                     ## rename old/new files accordingly
 
     # Create rdfs file from pairs
@@ -146,7 +148,8 @@ def compute_files(cg_xyz, cg_top, t, molecule_name, element_names):
                     ## See where data drop-off occurs and plot respectively
                     ## maybe use slope - negative less than some number, set as cutoff
                     ## record cutoff point somewhere for debugging purposes
-    np.savetxt('/data/rdfs_aa.txt', np.transpose([r, g_r])) # need check statements to prevent file overwrite
+    filepath = os.path.join(os.getcwd(), 'data/rdfs_aa.txt')
+    np.savetxt(filepath, np.transpose([r, g_r])) # need check statements to prevent file overwrite
     plot_output(r, g_r, molecule_name)
 
 def plot_output(x, y, molecule_name):
@@ -155,10 +158,13 @@ def plot_output(x, y, molecule_name):
     plt.plot(x, y, label="CG {0:s}".format(molecule_name)) ## Check label use string format method
 
     ## look up more aesthetic matplotlib functions
+    plt.title('Propane CG Graph at {0:s}'.format(time.strftime("%m/%d/%Y %I:%M:%S")))
     plt.xlabel("r")
     plt.ylabel("g(r)")
     plt.legend()
-    plt.savefig("/data/trajAPI_plot_propane.pdf")
+    filepath = os.path.join(os.getcwd(), 'data/trajAPI_plot_{0:s}.pdf'.format(molecule_name))
+    plt.savefig(filepath)
+    print("Figure should be saved to data folder.")
 
 def convert_Traj_RDF():
     ## add parameters to function calls - maybe add other functions
@@ -167,10 +173,12 @@ def convert_Traj_RDF():
     ##     - check_g_r_dropoff() - integrate with plot function
     ##     - manage_filetypes() - read in files
 
-    traj_filename = '/data/traj_unwrapped.dcd'
-    struct_filename = '/data/start_aa.hoomdxml'
-    search_mapping_filename = '/data/propane_search_mapping.xml'
-    user_mapping_filename = '/data/propane_user_mapping.xml'
+    traj_filename = os.path.join(os.getcwd(), 'data/traj_unwrapped.dcd')
+    struct_filename = os.path.join(os.getcwd(), 'data/start_aa.hoomdxml')
+    search_mapping_filename = os.path.join(os.getcwd(),
+                                'data/propane_search_mapping.xml')
+    user_mapping_filename = os.path.join(os.getcwd(),
+                                'data/propane_user_mapping.xml')
 
     t = md.load(traj_filename, top=struct_filename)
     # t.save('propane.mol2')
