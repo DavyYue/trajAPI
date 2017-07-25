@@ -64,6 +64,7 @@ def read_user_mapping(user_mapping_filename):
 
     # Get element_names, n_unitsPerSection
     element_names = [] # only need for atom definition
+    element_names.append('carbon')
     n_sections_BEAD = 0
     n_unitsPerSection = 0 # number units per section being combined
     for section in bead.findall('section'):
@@ -72,7 +73,7 @@ def read_user_mapping(user_mapping_filename):
         # https://github.com/luisnaranjo733/periodic
         # use foyer here to find indices
 
-        n_unitsPerSection = elements_symb.count("C")
+        n_unitsPerSection = section.attrib['elements'].count("C")
         # need to modify for different center elements
         # counts number of carbon center atoms since each section is organic
 
@@ -147,7 +148,7 @@ def create_system_mapping(element_names, n_sections_TOTAL, t):
 
     return cg_xyz, cg_top
 
-def compute_files(cg_xyz, cg_top, t, molecule_name):
+def compute_files(cg_xyz, cg_top, t, molecule_name, element_names):
     # Create Trajectory object and save to .dcd file
     cg_traj = md.Trajectory(cg_xyz, cg_top, time=None,
                             unitcell_lengths=t.unitcell_lengths,
@@ -168,7 +169,7 @@ def compute_files(cg_xyz, cg_top, t, molecule_name):
                     ## See where data drop-off occurs and plot respectively
                     ## maybe use slope - negative less than some number, set as cutoff
                     ## record cutoff point somewhere for debugging purposes
-    np.savetxt('rdfs_aa.txt', np.transpose([r, g_r])) # need check statements to prevent file overwrite
+    np.savetxt('/data/rdfs_aa.txt', np.transpose([r, g_r])) # need check statements to prevent file overwrite
 
     plot_output(r, g_r, molecule_name)
 
@@ -184,6 +185,7 @@ def plot_output(x, y, molecule_name):
     plt.xlabel("r")
     plt.ylabel("g(r)")
     plt.legend()
+    plt.savefig("/data/trajAPI_plot_propane.pdf")
 
 def convert_Traj_RDF():
     ## add parameters to function calls - maybe add other functions
@@ -192,10 +194,10 @@ def convert_Traj_RDF():
     ##     - check_g_r_dropoff() - integrate with plot function
     ##     - manage_filetypes() - read in files
 
-    traj_filename = 'traj_unwrapped.dcd'
-    struct_filename = 'start_aa.hoomdxml'
-    search_mapping_filename = 'propane_search_mapping.xml'
-    user_mapping_filename = 'propane_user_mapping.xml'
+    traj_filename = '/data/traj_unwrapped.dcd'
+    struct_filename = '/data/start_aa.hoomdxml'
+    search_mapping_filename = '/data/propane_search_mapping.xml'
+    user_mapping_filename = '/data/propane_user_mapping.xml'
 
     t = md.load(traj_filename, top=struct_filename)
     # t.save('propane.mol2')
@@ -206,7 +208,7 @@ def convert_Traj_RDF():
     n_sections_TOTAL = n_units_TOTAL // n_unitsPerSection
 
     cg_xyz, cg_top = create_system_mapping(element_names, n_sections_TOTAL, t)
-    compute_files(cg_xyz, cg_top, t, molecule_name)
+    compute_files(cg_xyz, cg_top, t, molecule_name, element_names)
 
 # Execute functions
 ## maybe use dictionary for element_names?
