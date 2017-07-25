@@ -36,6 +36,7 @@ Download and install the following packages:
 ## Notable Contributors
 
 * **Timothy C. Moore** - *Vanderbilt MuMS Institute Graduate Researcher* - [Profile](https://github.com/tcmoore3)
+* **Christoph Klein** - *Vanderbilt MuMS Institute Graduate Researcher* - [Profile](https://github.com/ctk3b)
 
     * Provided phenomenal coaching throughout API creation process
     * Supplied creative ideas in every stage of the SDLC

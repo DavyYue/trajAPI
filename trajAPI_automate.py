@@ -78,10 +78,8 @@ def read_system_info(struct_filename):
 def create_system_mapping(element_names, n_sections_TOTAL, t):
     # Initialize atoms with elements
     ## for loop to traverse element_names array for elements
-    ## first test - only use for carbon (one element)
-    ## then expand later
-    ## need to allow for different types of elements together
-    ## maybe use element library from msibi repo
+    ## need to expand from just carbon to more/different elements
+    ## maybe use elements from periodic package
     from mdtraj.core import element
     list(t.top.atoms)[0].element = element.carbon # check element
     list(t.top.atoms)[0].element.mass
@@ -149,7 +147,6 @@ def compute_files(cg_xyz, cg_top, t, molecule_name, element_names):
                     ## maybe use slope - negative less than some number, set as cutoff
                     ## record cutoff point somewhere for debugging purposes
     np.savetxt('/data/rdfs_aa.txt', np.transpose([r, g_r])) # need check statements to prevent file overwrite
-
     plot_output(r, g_r, molecule_name)
 
 def plot_output(x, y, molecule_name):
