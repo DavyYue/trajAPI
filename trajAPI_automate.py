@@ -77,6 +77,7 @@ def read_system_info(struct_filename):
 # read_system_info(struct_filename='start_aa.hoomdxml')
 
 def create_system_mapping(element_names, n_sections_TOTAL, t):
+    # SLOWEST PART OF CODE IS THIS FUNCTION
     # Initialize atoms with elements
     ## for loop to traverse element_names array for elements
     ## need to expand from just carbon to more/different elements
@@ -150,6 +151,7 @@ def compute_files(cg_xyz, cg_top, t, molecule_name, element_names):
                     ## record cutoff point somewhere for debugging purposes
     filepath = os.path.join(os.getcwd(), 'data/rdfs_aa.txt')
     np.savetxt(filepath, np.transpose([r, g_r])) # need check statements to prevent file overwrite
+    print("Saved rdfs to file")
     plot_output(r, g_r, molecule_name)
 
 def plot_output(x, y, molecule_name):
@@ -164,7 +166,7 @@ def plot_output(x, y, molecule_name):
     plt.legend()
     filepath = os.path.join(os.getcwd(), 'data/trajAPI_plot_{0:s}.pdf'.format(molecule_name))
     plt.savefig(filepath)
-    print("Figure should be saved to data folder.")
+    print("Figure should be saved to data folder")
 
 def convert_Traj_RDF():
     ## add parameters to function calls - maybe add other functions
@@ -181,14 +183,18 @@ def convert_Traj_RDF():
                                 'data/propane_user_mapping.xml')
 
     t = md.load(traj_filename, top=struct_filename)
+    print("Loaded struct & traj files")
     # t.save('propane.mol2')
     # struct_parmed = pmd.load_file('propane.mol2')
 
     n_units_TOTAL = read_system_info(struct_filename)
+    print("Read in system info from struct file")
     n_unitsPerSection, molecule_name, element_names = read_user_mapping(user_mapping_filename)
+    print("Read in user_mapping file")
     n_sections_TOTAL = n_units_TOTAL // n_unitsPerSection
 
     cg_xyz, cg_top = create_system_mapping(element_names, n_sections_TOTAL, t)
+    print("Created system mapping")
     compute_files(cg_xyz, cg_top, t, molecule_name, element_names)
 
 
