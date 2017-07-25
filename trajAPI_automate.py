@@ -6,6 +6,8 @@ import string
 import os
 from xml.etree import cElementTree as ET
 
+from foyer.smarts_graph import SMARTSGraph
+from foyer.smarts import SMARTSParser
 import parmed as pmd
 from periodic import element
 import numpy as np
@@ -17,16 +19,37 @@ from msibi import MSIBI, State, Pair, mie
 import mdtraj as md
 
 
-def read_search_mapping(search_mapping_filename, user_mapping_filename):
+def read_search_mapping(search_mapping_filename, user_mapping_filename, structure):
     # parser = ET.XMLParser(encoding="utf-8")
     # root = ET.fromstring(search_mapping_filename, parser=parser)
     root = ET.fromstring(open(search_mapping_filename).read())
     # root = ET.parse(search_mapping_filename).getroot()
 
-    searchstr = [] # list containing all search values ordered by priority
+    searchlist = [] # list containing all search values ordered by priority
     for value in root.findall('value'):
-        searchstr.append(value.attrib['searchstr'])
-        print(searchstr)
+        searchlist.append(value.attrib['searchstr'])
+        print(searchlist)
+
+    ############################ - SAMPLE CODE FROM CHRISTOPH
+    # from foyer.smarts_graph import SMARTSGraph
+    # from foyer.smarts import SMARTSParser
+    # import parmed as pmd
+    #
+    # structure = pmd.load_file('dppc.mol2')
+    # smarts = 'CCC'
+    # parser = SMARTSParser()
+    #
+    # graph = SMARTSGraph(smarts, parser=parser)
+    #
+    # matches = graph.find_matches(structure)
+    ############################ - SAMPLE CODE FROM CHRISTOPH
+
+    parser = SMARTSParser()
+    matches = []
+
+    for searchstr in searchlist:
+        graph = SMARTSGRAPH(searchstr, parser=parser)
+        matches.append(graph.findmatches(structure))
 
 # SMARTS string
 # Current supported SMARTS string: https://github.com/mosdef-hub/foyer/issues/63
@@ -105,7 +128,7 @@ def create_system_mapping(element_names, n_sections_TOTAL, t):
 
 
     system_mapping = {}
-    for n in range(n_sections_TOTAL):
+    for n in range(n_sections_TOTAL): # what does sections mean in this particular context
         for bead, atoms in propane_map.items():
             system_mapping[cg_idx] = [x + start_idx for x in atoms]
             start_idx += len(atoms) # understand this part
@@ -185,7 +208,7 @@ def convert_Traj_RDF():
     t = md.load(traj_filename, top=struct_filename)
     print("Loaded struct & traj files")
     # t.save('propane.mol2')
-    # struct_parmed = pmd.load_file('propane.mol2')
+    # structure = pmd.load_file('propane.mol2')
 
     n_units_TOTAL = read_system_info(struct_filename)
     print("Read in system info from struct file")
