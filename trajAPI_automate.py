@@ -1,6 +1,6 @@
 # # testAPI_automate
-#
 # Created by Davy Yue 2017-06-26
+
 import itertools
 import string
 import os
@@ -13,7 +13,7 @@ import parmed as pmd
 from periodic import element
 import numpy as np
 import matplotlib.pyplot as plt
-# get_ipython().magic('matplotlib inline')
+# get_ipython().magic('matplotlib inline') # unknown error need to check this
 import time
 
 from msibi import MSIBI, State, Pair, mie
@@ -42,7 +42,6 @@ def read_search_mapping(search_mapping_filename, user_mapping_filename, structur
 
 # SMARTS string
 # Current supported SMARTS string: https://github.com/mosdef-hub/foyer/issues/63
-# https://pubchem.ncbi.nlm.nih.gov/search/help_search.html
 
 def read_user_mapping(user_mapping_filename):
     # parser = ET.XMLParser(encoding="utf-8")
@@ -108,9 +107,6 @@ def create_system_mapping(element_names, n_sections_TOTAL, t):
     ## TEST CODE
     ######################################################################
     ######################################################################
-
-
-
     ######################################################################
     ######################################################################
     ## TEST CODE
@@ -218,9 +214,6 @@ def convert_Traj_RDF():
     # cg_xyz, cg_top = create_system_mapping(element_names, n_sections_TOTAL, t)
     # print("Created system mapping")
     # compute_files(cg_xyz, cg_top, t, molecule_name, element_names)
-
-
-
 
 # Execute functions
 ## maybe initialize element_names array from read-in file with bonds
