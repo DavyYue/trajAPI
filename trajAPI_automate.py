@@ -7,7 +7,8 @@ import os
 from xml.etree import cElementTree as ET
 
 from foyer.smarts_graph import SMARTSGraph
-from foyer.smarts import SMARTSParser
+from foyer.smarts import SMARTS as SMARTSParser
+import mbuild as mb
 import parmed as pmd
 from periodic import element
 import numpy as np
@@ -30,26 +31,14 @@ def read_search_mapping(search_mapping_filename, user_mapping_filename, structur
         searchlist.append(value.attrib['searchstr'])
         print(searchlist)
 
-    ############################ - SAMPLE CODE FROM CHRISTOPH
-    # from foyer.smarts_graph import SMARTSGraph
-    # from foyer.smarts import SMARTSParser
-    # import parmed as pmd
-    #
-    # structure = pmd.load_file('dppc.mol2')
-    # smarts = 'CCC'
-    # parser = SMARTSParser()
-    #
-    # graph = SMARTSGraph(smarts, parser=parser)
-    #
-    # matches = graph.find_matches(structure)
-    ############################ - SAMPLE CODE FROM CHRISTOPH
-
     parser = SMARTSParser()
     matches = []
 
     for searchstr in searchlist:
         graph = SMARTSGRAPH(searchstr, parser=parser)
         matches.append(graph.findmatches(structure))
+
+    return matches
 
 # SMARTS string
 # Current supported SMARTS string: https://github.com/mosdef-hub/foyer/issues/63
@@ -196,7 +185,7 @@ def convert_Traj_RDF():
     ## other potential functions:
     ##     - check_file_overwrite()
     ##     - check_g_r_dropoff() - integrate with plot function
-    ##     - manage_filetypes() - read in files
+    ##     - manage_filetypes() - read in files (maybe for mdtraj flexibility)
 
     traj_filename = os.path.join(os.getcwd(), 'data/traj_unwrapped.dcd')
     struct_filename = os.path.join(os.getcwd(), 'data/start_aa.hoomdxml')
@@ -205,20 +194,30 @@ def convert_Traj_RDF():
     user_mapping_filename = os.path.join(os.getcwd(),
                                 'data/propane_user_mapping.xml')
 
-    t = md.load(traj_filename, top=struct_filename)
-    print("Loaded struct & traj files")
-    # t.save('propane.mol2')
-    # structure = pmd.load_file('propane.mol2')
+    # t = md.load(traj_filename, top=struct_filename)
+    # print("Loaded struct & traj files")
 
-    n_units_TOTAL = read_system_info(struct_filename)
-    print("Read in system info from struct file")
-    n_unitsPerSection, molecule_name, element_names = read_user_mapping(user_mapping_filename)
-    print("Read in user_mapping file")
-    n_sections_TOTAL = n_units_TOTAL // n_unitsPerSection
+    first_frame = md.load_frame(traj_filename, index=0, top=struct_filename)
 
-    cg_xyz, cg_top = create_system_mapping(element_names, n_sections_TOTAL, t)
-    print("Created system mapping")
-    compute_files(cg_xyz, cg_top, t, molecule_name, element_names)
+    filepath_pdb = os.path.join(os.getcwd(), 'data/propane.pdb')
+    first_frame.save(filepath_pdb)
+
+    propane_compound = mb.load(filepath_pdb)
+    filepath_mol2 = os.path.join(os.getcwd(), 'data/propane.mol2')
+    propane_compound.save(filepath_mol2)
+    # t.save(filepath)
+    structure = pmd.load_file(filepath_mol2)
+    #print(read_search_mapping(search_mapping_filename, user_mapping_filename, structure))
+
+    # n_units_TOTAL = read_system_info(struct_filename)
+    # print("Read in system info from struct file")
+    # n_unitsPerSection, molecule_name, element_names = read_user_mapping(user_mapping_filename)
+    # print("Read in user_mapping file")
+    # n_sections_TOTAL = n_units_TOTAL // n_unitsPerSection
+
+    # cg_xyz, cg_top = create_system_mapping(element_names, n_sections_TOTAL, t)
+    # print("Created system mapping")
+    # compute_files(cg_xyz, cg_top, t, molecule_name, element_names)
 
 
 
