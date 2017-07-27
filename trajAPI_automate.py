@@ -19,25 +19,37 @@ from msibi import MSIBI, State, Pair, mie
 import mdtraj as md
 
 
-def read_search_mapping(search_mapping_filename, user_mapping_filename, structure):
+def read_search_mapping(search_mapping_filename, user_mapping_filename, topology):
     # parser = ET.XMLParser(encoding="utf-8")
     # root = ET.fromstring(search_mapping_filename, parser=parser)
-    root = ET.fromstring(open(search_mapping_filename).read())
     # root = ET.parse(search_mapping_filename).getroot()
 
+    root = ET.fromstring(open(search_mapping_filename).read())
     searchlist = [] # list containing all search values ordered by priority
     for value in root.findall('value'):
         searchlist.append(value.attrib['searchstr'])
         print(searchlist)
 
+    oot = ET.fromstring(open(search_mapping_filename).read())
+    molecules = []
+    for molecule in root.findall('molecule'):
+        molecules.append(value.attrib['mol_str']) #smarts string for molecule
+        print(molecules)
+
     parser = SMARTSParser()
     matches = []
 
     for searchstr in searchlist:
-        graph = SMARTSGRAPH(searchstr, parser=parser)
-        matches.append(graph.find_matches(structure))
+        print(searchstr)
+        graph = SMARTSGraph(searchstr, parser=parser)
+        i = graph.find_matches(topology)
+        matches.append(list(i))
 
     return matches
+
+def recursive_matchfinder():
+
+    return 0
 
 # SMARTS string
 # Current supported SMARTS string: https://github.com/mosdef-hub/foyer/issues/63
@@ -49,24 +61,24 @@ def read_user_mapping(user_mapping_filename):
     # root = ET.parse(user_mapping_filename).getroot()
 
     # Get molecule_name
-    bead = root.find('bead')
-    molecule_name = bead.attrib["molecule_name"]
+    molecule = root.find('molecule')
+    molecule_name = molecule.attrib["molecule_name"]
 
     # Get element_names, n_unitsPerSection
     element_names = [] # only need for atom definition
     element_names.append('carbon')
+
     n_sections_BEAD = 0
     n_unitsPerSection = 0 # number units per section being combined
-    for section in bead.findall('section'):
+    for section in root.findall('molecule'):
         # allow for different number of units in each section per bead
         # Element identification using Periodic python package
         # https://github.com/luisnaranjo733/periodic
         # use foyer here to find indices
 
-        n_unitsPerSection = section.attrib['elements'].count("C")
+        n_unitsPerSection = molecule.attrib['mol_str'].count("C")
         # need to modify for different center elements
         # counts number of carbon center atoms since each section is organic
-
 
     print(n_unitsPerSection)
     # check later for more different elements with loop
@@ -192,9 +204,9 @@ def convert_Traj_RDF():
     t = md.load(traj_filename, top=struct_filename)
     print("Loaded struct & traj files")
 
-    top = t.top.to_openmm(traj=t) #openmm topology
-
-    print(read_search_mapping(search_mapping_filename, user_mapping_filename, structure))
+    topology = t.top.to_openmm(traj=t) # openmm topology accepted by foyer
+    print(read_search_mapping(search_mapping_filename,
+                                user_mapping_filename, topology))
 
     # n_units_TOTAL = read_system_info(struct_filename)
     # print("Read in system info from struct file")
