@@ -35,7 +35,7 @@ def read_search_mapping(search_mapping_filename, user_mapping_filename, structur
 
     for searchstr in searchlist:
         graph = SMARTSGRAPH(searchstr, parser=parser)
-        matches.append(graph.findmatches(structure))
+        matches.append(graph.find_matches(structure))
 
     return matches
 
@@ -192,27 +192,9 @@ def convert_Traj_RDF():
     t = md.load(traj_filename, top=struct_filename)
     print("Loaded struct & traj files")
 
-    #### ORIGINAL CODE
-    filepath_mol2 = os.path.join(os.getcwd(), 'data/propane.mol2')
-    t.save(filepath_mol2)
-    structure = pmd.load(filepath_mol2)
-    #### ORIGINAL CODE
+    top = t.top.to_openmm(traj=t) #openmm topology
 
-    #### ATTEMPTED SOLVE WITH MBUILD
-    '''
-    first_frame = md.load_frame(traj_filename, index=0, top=struct_filename)
-
-    filepath_pdb = os.path.join(os.getcwd(), 'data/propane.pdb')
-    first_frame.save(filepath_pdb)
-
-    propane_compound = mb.load(filepath_pdb)
-    filepath_mol2 = os.path.join(os.getcwd(), 'data/propane.mol2')
-    propane_compound.save(filepath_mol2)
-    structure = pmd.load_file(filepath_mol2)
-    '''
-    #### ATTEMPTED SOLVE WITH MBUILD
-
-    #print(read_search_mapping(search_mapping_filename, user_mapping_filename, structure))
+    print(read_search_mapping(search_mapping_filename, user_mapping_filename, structure))
 
     # n_units_TOTAL = read_system_info(struct_filename)
     # print("Read in system info from struct file")
