@@ -8,7 +8,6 @@ from xml.etree import cElementTree as ET
 
 from foyer.smarts_graph import SMARTSGraph
 from foyer.smarts import SMARTS as SMARTSParser
-import mbuild as mb
 import parmed as pmd
 from periodic import element
 import numpy as np
@@ -190,9 +189,17 @@ def convert_Traj_RDF():
     user_mapping_filename = os.path.join(os.getcwd(),
                                 'data/propane_user_mapping.xml')
 
-    # t = md.load(traj_filename, top=struct_filename)
-    # print("Loaded struct & traj files")
+    t = md.load(traj_filename, top=struct_filename)
+    print("Loaded struct & traj files")
 
+    #### ORIGINAL CODE
+    filepath_mol2 = os.path.join(os.getcwd(), 'data/propane.mol2')
+    t.save(filepath_mol2)
+    structure = pmd.load(filepath_mol2)
+    #### ORIGINAL CODE
+
+    #### ATTEMPTED SOLVE WITH MBUILD
+    '''
     first_frame = md.load_frame(traj_filename, index=0, top=struct_filename)
 
     filepath_pdb = os.path.join(os.getcwd(), 'data/propane.pdb')
@@ -201,8 +208,10 @@ def convert_Traj_RDF():
     propane_compound = mb.load(filepath_pdb)
     filepath_mol2 = os.path.join(os.getcwd(), 'data/propane.mol2')
     propane_compound.save(filepath_mol2)
-    # t.save(filepath)
     structure = pmd.load_file(filepath_mol2)
+    '''
+    #### ATTEMPTED SOLVE WITH MBUILD
+
     #print(read_search_mapping(search_mapping_filename, user_mapping_filename, structure))
 
     # n_units_TOTAL = read_system_info(struct_filename)
