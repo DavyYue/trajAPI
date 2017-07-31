@@ -6,6 +6,7 @@ import string
 import os
 from xml.etree import cElementTree as ET
 
+from mdtraj.core.element import Element
 from foyer.smarts_graph import SMARTSGraph
 from foyer.smarts import SMARTS as SMARTSParser
 import parmed as pmd
@@ -45,9 +46,11 @@ def read_search_mapping(search_mapping_filename, user_mapping_filename, topology
         i = graph.find_matches(topology)
         matches.append(list(i))
 
+    print(matches)
+
     return matches
 
-def recursive_matchfinder():
+def recursive_MatchMaker():
 
     return 0
 
@@ -104,11 +107,9 @@ def create_system_mapping(element_names, n_sections_TOTAL, t):
     ## for loop to traverse element_names array for elements
     ## need to expand from just carbon to more/different elements
     ## maybe use elements from periodic package
-    from mdtraj.core import element
-    list(t.top.atoms)[0].element = element.carbon # check element
-    list(t.top.atoms)[0].element.mass
-    for atom in t.top.atoms:
-        atom.element = element.carbon # check element
+    for atom in t.top.atoms: #possible other function
+        atom.element = Element.getBySymbol(atom.name) # check element
+        #need for the xml file to have element symbol as type
 
     # Map the beads accordingly
     cg_idx = 0
@@ -203,10 +204,15 @@ def convert_Traj_RDF():
 
     t = md.load(traj_filename, top=struct_filename)
     print("Loaded struct & traj files")
+    # print(t.top.find_molecules())
+
+    for atom in t.top.atoms: #possible other function
+        atom.element = Element.getBySymbol(atom.name)
 
     topology = t.top.to_openmm(traj=t) # openmm topology accepted by foyer
-    print(read_search_mapping(search_mapping_filename,
-                                user_mapping_filename, topology))
+    # import pdb; pdb.set_trace()
+    
+    read_search_mapping(search_mapping_filename, user_mapping_filename, topology)
 
     # n_units_TOTAL = read_system_info(struct_filename)
     # print("Read in system info from struct file")
