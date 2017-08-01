@@ -6,6 +6,7 @@ import string
 import os
 from xml.etree import cElementTree as ET
 
+import networkx as nx
 from mdtraj.core.element import Element
 from foyer.smarts_graph import SMARTSGraph
 from foyer.smarts import SMARTS as SMARTSParser
@@ -122,8 +123,6 @@ def create_system_mapping(element_names, n_sections_TOTAL, t):
     ## TEST CODE
     ######################################################################
     ######################################################################
-    ######################################################################
-    ######################################################################
     ## TEST CODE
 
 
@@ -213,7 +212,8 @@ def plot_output(x, y, molecule_name):
     plt.plot(x, y, label="CG {0:s}".format(molecule_name)) ## Check label use string format method
 
     ## look up more aesthetic matplotlib functions
-    plt.title('Propane CG Graph at {0:s}'.format(time.strftime("%m/%d/%Y %I:%M:%S")))
+    plt.title('Propane CG Graph at {0:s}'.format(
+                                time.strftime("%m/%d/%Y %I:%M:%S")))
     plt.xlabel("r")
     plt.ylabel("g(r)")
     plt.legend()
@@ -241,7 +241,13 @@ def convert_Traj_RDF():
 
     t = md.load(traj_filename, top=struct_filename)
     print("Loaded struct & traj files")
-    # print(t.top.find_molecules())
+
+    molecules = t.top.find_molecules()
+    first_mol_indices = [atom.index for atom in list(molecules[0])]
+    first_molecule = t.top.subset(first_mol_indices) # topology for first molecule
+
+    import pdb; pdb.set_trace()
+    # print(molecule)
 
     for atom in t.top.atoms: #possible other function
         atom.element = Element.getBySymbol(atom.name)
@@ -249,8 +255,8 @@ def convert_Traj_RDF():
     topology = t.top.to_openmm(traj=t) # openmm topology accepted by foyer
     # import pdb; pdb.set_trace()
 
-    read_search_mapping(search_mapping_filename,
-                        user_mapping_filename, topology)
+    # read_search_mapping(search_mapping_filename,
+    #                    user_mapping_filename, topology)
 
     # n_units_TOTAL = read_system_info(struct_filename)
     # print("Read in system info from struct file")
