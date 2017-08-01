@@ -34,10 +34,6 @@ def read_search_mapping(search_mapping_filename, user_mapping_filename, topology
 
     """
 
-    # parser = ET.XMLParser(encoding="utf-8")
-    # root = ET.fromstring(search_mapping_filename, parser=parser)
-    # root = ET.parse(search_mapping_filename).getroot()
-
     root = ET.fromstring(open(search_mapping_filename).read())
     searchlist = [] # list containing all search values ordered by priority
     for value in root.findall('value'):
@@ -71,10 +67,7 @@ def recursive_MatchMaker():
 # Current supported SMARTS string: https://github.com/mosdef-hub/foyer/issues/63
 
 def read_user_mapping(user_mapping_filename):
-    # parser = ET.XMLParser(encoding="utf-8")
-    # root = ET.fromstring(user_mapping_filename, parser=parser)
     root = ET.fromstring(open(user_mapping_filename).read())
-    # root = ET.parse(user_mapping_filename).getroot()
 
     # Get molecule_name
     molecule = root.find('molecule')
@@ -103,10 +96,7 @@ def read_user_mapping(user_mapping_filename):
 # read_user_mapping(user_mapping_filename='propane_user_mapping.xml')
 
 def read_system_info(struct_filename):
-    # parser = ET.XMLParser(encoding="utf-8")
-    # root = ET.fromstring(struct_filename, parser=parser)
     root = ET.fromstring(open(struct_filename).read())
-    # root = ET.parse(struct_filename).getroot()
     n_unitsTotal = int(root.find('configuration').find('position').attrib['num'])
     print(n_unitsTotal)
 
@@ -240,8 +230,10 @@ def convert_Traj_RDF():
     ##     - check_g_r_dropoff() - integrate with plot function
     ##     - manage_filetypes() - read in files (maybe for mdtraj flexibility)
 
-    traj_filename = os.path.join(os.getcwd(), 'data/traj_unwrapped.dcd')
-    struct_filename = os.path.join(os.getcwd(), 'data/start_aa.hoomdxml')
+    traj_filename = os.path.join(os.getcwd(),
+                                'data/traj_unwrapped.dcd')
+    struct_filename = os.path.join(os.getcwd(),
+                                'data/start_aa.hoomdxml')
     search_mapping_filename = os.path.join(os.getcwd(),
                                 'data/propane_search_mapping.xml')
     user_mapping_filename = os.path.join(os.getcwd(),
@@ -257,7 +249,8 @@ def convert_Traj_RDF():
     topology = t.top.to_openmm(traj=t) # openmm topology accepted by foyer
     # import pdb; pdb.set_trace()
 
-    read_search_mapping(search_mapping_filename, user_mapping_filename, topology)
+    read_search_mapping(search_mapping_filename,
+                        user_mapping_filename, topology)
 
     # n_units_TOTAL = read_system_info(struct_filename)
     # print("Read in system info from struct file")
