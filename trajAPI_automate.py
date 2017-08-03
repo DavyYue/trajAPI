@@ -97,6 +97,15 @@ def read_user_mapping(user_mapping_filename):
 # read_user_mapping(user_mapping_filename='propane_user_mapping.xml')
 
 def read_system_info(struct_filename):
+    """Read system information from structure hoomdxml file
+
+    Parameters
+    ----------
+    struct_filename: str
+        Name of hoomdxml file containing molecule structures
+
+    """
+
     root = ET.fromstring(open(struct_filename).read())
     n_unitsTotal = int(root.find('configuration').find('position').attrib['num'])
     print(n_unitsTotal)
@@ -105,7 +114,19 @@ def read_system_info(struct_filename):
 
 # read_system_info(struct_filename='start_aa.hoomdxml')
 
-def create_system_mapping(element_names, n_sections_TOTAL, t):
+def create_system_mapping(element_names, n_beads_TOTAL, t):
+    """Create a system mapping
+
+    Parameters
+    ----------
+    element_names : (???)
+        (???)
+    n_beads_TOTAL : int
+        Number of beads in the system
+    t : mdTraj.Trajectory
+        Initial trajectory object generated from structure and trajectory files
+    """
+
     # SLOWEST PART OF CODE IS THIS FUNCTION
     # Initialize atoms with elements
     ## for loop to traverse element_names array for elements
@@ -127,7 +148,7 @@ def create_system_mapping(element_names, n_sections_TOTAL, t):
 
 
     system_mapping = {}
-    for n in range(n_sections_TOTAL): # what does sections mean in this particular context
+    for n in range(n_beads_TOTAL): # what does sections mean in this particular context
         for bead, atoms in propane_map.items():
             system_mapping[cg_idx] = [x + start_idx for x in atoms]
             start_idx += len(atoms) # understand this part
@@ -217,8 +238,8 @@ def plot_output(x, y, molecule_name):
     plt.xlabel("r")
     plt.ylabel("g(r)")
     plt.legend()
-    filepath = os.path.join(os.getcwd(), 'data/trajAPI_plot_{0:s}.pdf'.format(molecule_name))
-    plt.savefig(filepath)
+    plt.savefig(os.path.join(os.getcwd(),
+                'data/trajAPI_plot_{0:s}.pdf'.format(molecule_name)))
     print("Figure should be saved to data folder")
 
 def convert_Traj_RDF():
@@ -246,25 +267,22 @@ def convert_Traj_RDF():
     first_mol_indices = [atom.index for atom in list(molecules[0])]
     first_molecule = t.top.subset(first_mol_indices) # topology for first molecule
 
-    import pdb; pdb.set_trace()
-    # print(molecule)
-
-    for atom in t.top.atoms: #possible other function
+    for atom in first_molecule.atoms: #possible other function
         atom.element = Element.getBySymbol(atom.name)
 
-    topology = t.top.to_openmm(traj=t) # openmm topology accepted by foyer
+    topology = first_molecule.to_openmm(traj=None) # openmm topology accepted by foyer
     # import pdb; pdb.set_trace()
 
-    # read_search_mapping(search_mapping_filename,
-    #                    user_mapping_filename, topology)
+    read_search_mapping(search_mapping_filename,
+                        user_mapping_filename, topology)
 
     # n_units_TOTAL = read_system_info(struct_filename)
     # print("Read in system info from struct file")
     # n_unitsPerSection, molecule_name, element_names = read_user_mapping(user_mapping_filename)
     # print("Read in user_mapping file")
-    # n_sections_TOTAL = n_units_TOTAL // n_unitsPerSection
+    # n_beads_TOTAL = n_units_TOTAL // n_unitsPerSection
 
-    # cg_xyz, cg_top = create_system_mapping(element_names, n_sections_TOTAL, t)
+    # cg_xyz, cg_top = create_system_mapping(element_names, n_beads_TOTAL, t)
     # print("Created system mapping")
     # compute_files(cg_xyz, cg_top, t, molecule_name, element_names)
 
