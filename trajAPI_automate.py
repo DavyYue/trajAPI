@@ -35,13 +35,16 @@ def read_search_mapping(search_mapping_filename, user_mapping_filename, topology
 
     """
 
-    root = ET.fromstring(open(search_mapping_filename).read())
+    # root = ET.fromstring(open(search_mapping_filename).read())
     searchlist = [] # list containing all search values ordered by priority
-    for value in root.findall('value'):
-        searchlist.append(value.attrib['searchstr'])
+    searchlist.append("C")
+    searchlist.append("CC")
+    searchlist.append("CCC")
+    # for value in root.findall('value'):
+    #     searchlist.append(value.attrib['searchstr'])
     print("{0:s}: {1}".format("Search String", searchlist))
 
-    root = ET.fromstring(open(user_mapping_filename).read())
+    #root = ET.fromstring(open(user_mapping_filename).read())
     molecules = []
     for molecule in root.findall('molecule'):
         molecules.append(molecule.attrib['mol_str']) #smarts string for molecule
